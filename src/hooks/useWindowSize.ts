@@ -1,44 +1,57 @@
 import { useEffect, useState, useCallback } from "react";
-import { ThemeBreakpointName } from "vcc-ui/dist/types/shared";
 
+import { BREAKPOINTS } from "../constants";
 
-interface windowResizeArgs {
-  width: number,
-  height: number,
-  themeBreakpoint: ThemeBreakpointName,
+export const getBreakPoint = (windowWidth: number): string | undefined => {
+  if (windowWidth) {
+    if (windowWidth < 480) {
+      return BREAKPOINTS.untilM;
+    } else if (windowWidth < 1024) {
+      return BREAKPOINTS.untilL;
+    } else if (windowWidth < 1600) {
+      return BREAKPOINTS.untilXL;
+    } else {
+      return BREAKPOINTS.onlyXL;
+    }
+  } else {
+    return undefined;
+  }
 }
 
-export const useWindow = (onWindowChange?: () => void) => {
-  const [windowSize, setWindowSize] = useState<windowResizeArgs>({
-    width: 0,
-    height: 0,
-    themeBreakpoint: 'untilXL',
-  });
+export const useWindowSize = (onWindowChange?: (width: number) => void) => {
+  const isWindowClient = typeof window === "object";
+  const [windowSize, setWindowSize] = useState(
+    isWindowClient ? {
+      width: window.innerWidth,
+      breakpoint: getBreakPoint(window.innerWidth)
+    } : undefined
+  );
 
-  const handleResize = useCallback(() => {
-    const themeBreakpoint = ThemeService.extractThemeBreakpoint(window.innerWidth);
-
+  const setSize = useCallback(() => {
     setWindowSize({
       width: window.innerWidth,
-      height: window.innerHeight,
-      themeBreakpoint
+      breakpoint: getBreakPoint(window.innerWidth)
     });
 
-    if(onWindowChange) {
-      onWindowChange();
+    if(isWindowClient && onWindowChange) {
+      onWindowChange(window.innerWidth);
     }
-  }, [onWindowChange]);
+  }, [onWindowChange, isWindowClient, setWindowSize]);
 
   useEffect(() => {
-    window.addEventListener("resize", handleResize);
 
-    // Call to update with initial window size
-    handleResize();
+    if (isWindowClient) {
+      window.addEventListener("resize", setSize);
+      window.addEventListener("load", setSize);
 
-    return () => {
-      window.removeEventListener("resize", handleResize)
-    };
-  }, []);
+      return () => {
+        window.removeEventListener("resize", setSize);
+        window.removeEventListener("load", setSize);
+      }
+    }
+  }, [isWindowClient, setWindowSize]);
 
-  return windowSize
+  return windowSize;
 }
+
+export default useWindowSize;
