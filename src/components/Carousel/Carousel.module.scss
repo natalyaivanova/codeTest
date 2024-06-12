@@ -1,0 +1,17 @@
+.carouselWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 70vw;
+  margin: auto;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.paginationDesktop {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-right: .5vw;
+  gap: 1vw;
+}
