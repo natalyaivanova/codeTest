@@ -2,7 +2,6 @@ import React, {useState, useRef, useEffect, useCallback} from "react";
 import { isEmpty } from "lodash-es";
 import { Flex, View } from "vcc-ui";
 
-import styles from "./Carousel.module.scss";
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { BREAKPOINTS } from "../../constants";
 import Pagination from "../Pagination";
@@ -50,8 +49,12 @@ export const Carousel = (props: CarouselProps) => {
     isEmpty(items)
     ? emptyState
     : <View
-        className={styles.carouselWrapper}
         extend={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: 'auto',
+          flexWrap: 'nowrap',
+          overflow: 'hidden',
           width: carouselWidth ? `${carouselWidth}px` : '100%',
           maxWidth: carouselWidth ? `${carouselWidth}px` : '100%',
         }}
