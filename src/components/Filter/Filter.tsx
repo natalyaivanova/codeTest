@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Flex, SelectInput } from "vcc-ui";
+import { View, SelectInput } from "vcc-ui";
 
 import { IFilterOption } from "./Filters.types";
 import { FILTER_ALL_VALUE } from "../../constants";
@@ -22,24 +22,18 @@ export const Filter = (props: FilterProps) => {
   }, [onSelect, setValue, name]);
 
   return (
-    <Flex
+    <View
       extend={{
-        justifyContent: 'flex-start',
-        gap: '1rem',
+        marginBottom: '2vw',
         padding: '1rem',
-        marginBottom: '2vw'
       }}
     >
       <SelectInput
         name={name}
-        label={value}
+        label={label}
         value={value}
         id={name}
         onChange={filterSelectHandler}
-        style={{
-          width: '200px',
-          height: '35px'
-        }}
       >
         <option value={FILTER_ALL_VALUE} key={`${label}${FILTER_ALL_VALUE}`}>All</option>)
         {options.map(item =>
@@ -48,7 +42,7 @@ export const Filter = (props: FilterProps) => {
             key={`${label}${item.value}`}
           >{item.label}</option>)}
       </SelectInput>
-    </Flex>
+    </View>
    );
 };
 

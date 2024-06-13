@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Grid, Row } from "vcc-ui";
+import { View, Row } from "vcc-ui";
 import { uniqWith, isEqual } from "lodash-es";
 
 import { useCars } from "../../hooks/useCars";
@@ -35,22 +35,30 @@ export const CarList: React.FC = () => {
   }, [initialCars, setCarCards, getCarCards]);
 
   return (
-    <Grid>
-      <Row align={'center'}>
-        <h1 style={{ textAlign: 'center', margin: '7vh' }}>VOLVO cars:</h1>
-      </Row>
-      <Row align={'center'}>
+    <View>
+      <h1 style={{ textAlign: 'center', margin: '7vh' }}>VOLVO cars:</h1>
+      <View
+        extend={{
+          padding: 0,
+          overflowX: 'hidden',
+          untilL: {
+            width: '100vw',
+            padding: '0 10px',
+          },
+          fromL: {
+            width: '72vw',
+            margin: '0 auto'
+          }}
+        }>
         <Filter
           name="bodyType"
           label="Body type"
           options={bodyTypeFilterOptions}
           onSelect={onSelectFilter}
         />
-      </Row>
-      <Row align={'center'}>
         <Carousel items={carCards} />
-      </Row>
-    </Grid>
+      </View>
+    </View>
   );
 };
 
