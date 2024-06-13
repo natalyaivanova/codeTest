@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { isEmpty } from "lodash-es";
-import { Flex, View } from "vcc-ui";
+import { Flex } from "vcc-ui";
 
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { BREAKPOINTS } from "../../constants";
@@ -12,6 +12,7 @@ interface CarouselProps {
 
 export const Carousel = (props: CarouselProps) => {
   const { items  } = props;
+
   const imagesContainerRef = useRef<HTMLDivElement | null>(null);
   const oneStepOffset = imagesContainerRef?.current?.children[0].clientWidth || 0;
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -48,7 +49,7 @@ export const Carousel = (props: CarouselProps) => {
   return (
     isEmpty(items)
     ? emptyState
-    : <View
+    : <Flex
         extend={{
           display: 'flex',
           flexDirection: 'column',
@@ -78,7 +79,7 @@ export const Carousel = (props: CarouselProps) => {
           moveRightHandler={moveRight}
           dotClickHandler={dotClick}
         />
-    </View>
+    </Flex>
   );
 };
 

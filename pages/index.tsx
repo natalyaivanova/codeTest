@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Flex } from "vcc-ui";
+import { Flex } from "vcc-ui";
 
 import CarList from "../src/pages/CarList";
 
@@ -13,10 +13,10 @@ const IndexPage = () => {
           padding: 5,
         },
         untilL: {
-          width: '90vw',
+          width: '94vw',
         },
         fromL: {
-          width: '70vw',
+          width: '64vw',
           margin: '0 auto'
         }
     }}>

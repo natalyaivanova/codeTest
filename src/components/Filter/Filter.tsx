@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Flex } from "vcc-ui";
+import { Flex, SelectInput } from "vcc-ui";
 
 import { IFilterOption } from "./Filters.types";
 import { FILTER_ALL_VALUE } from "../../constants";
@@ -13,23 +13,27 @@ interface FilterProps {
 }
 
 export const Filter = (props: FilterProps) => {
-  const { name, label, value, options, onSelect } = props;
+  const { name, label, options, onSelect } = props;
+  const [value, setValue] = React.useState(FILTER_ALL_VALUE);
 
-  const filterSelectHandler = useCallback((e: React.ChangeEvent<HTMLSelectElement>) =>
-    onSelect(name, e.target.value), [onSelect, name]);
+  const filterSelectHandler = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(e.target.value);
+    onSelect(name, e.target.value);
+  }, [onSelect, setValue, name]);
 
   return (
     <Flex
       extend={{
-        flexDirection: 'row',
-        alignItems: 'center',
+        justifyContent: 'flex-start',
         gap: '1rem',
-        padding: '1rem'
+        padding: '1rem',
+        marginBottom: '2vw'
       }}
     >
-      <label htmlFor={name}>{label}</label>
-      <select
+      <SelectInput
         name={name}
+        label={value}
+        value={value}
         id={name}
         onChange={filterSelectHandler}
         style={{
@@ -43,7 +47,7 @@ export const Filter = (props: FilterProps) => {
             value={item.value}
             key={`${label}${item.value}`}
           >{item.label}</option>)}
-      </select>
+      </SelectInput>
     </Flex>
    );
 };

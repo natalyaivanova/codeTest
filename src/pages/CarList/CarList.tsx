@@ -37,7 +37,7 @@ export const CarList: React.FC = () => {
   return (
     <Grid>
       <Row align={'center'}>
-        <h2 style={{ textAlign: 'center', margin: '10vh' }}>VOLVO cars:</h2>
+        <h1 style={{ textAlign: 'center', margin: '7vh' }}>VOLVO cars:</h1>
       </Row>
       <Row align={'center'}>
         <Filter
@@ -47,7 +47,7 @@ export const CarList: React.FC = () => {
           onSelect={onSelectFilter}
         />
       </Row>
-      <Row>
+      <Row align={'center'}>
         <Carousel items={carCards} />
       </Row>
     </Grid>

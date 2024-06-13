@@ -46,7 +46,7 @@ export const CarCard = (props: CarCardProps) => {
 
       <Flex extend={{
         untilL: {
-          width: '400px'
+          width: '380px'
         },
         fromL: {
           width: '240px'
