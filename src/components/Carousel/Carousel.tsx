@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect, useCallback} from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { isEmpty } from "lodash-es";
 import { Flex, View } from "vcc-ui";
 
@@ -11,7 +11,7 @@ interface CarouselProps {
 }
 
 export const Carousel = (props: CarouselProps) => {
-  const { items } = props;
+  const { items  } = props;
   const imagesContainerRef = useRef<HTMLDivElement | null>(null);
   const oneStepOffset = imagesContainerRef?.current?.children[0].clientWidth || 0;
   const [currentOffset, setCurrentOffset] = useState(0);

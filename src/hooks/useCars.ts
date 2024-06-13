@@ -10,7 +10,5 @@ export function useCars() {
     getCars().then(res => setCars(res))
   }, [])
 
-  return {
-    cars
-  }
+  return cars;
 }
