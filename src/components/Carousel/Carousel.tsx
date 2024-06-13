@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from "react";
+import React, {useState, useRef, useMemo, useCallback} from "react";
 import { isEmpty } from "lodash-es";
 import { Click, Flex, IconButton, View } from "vcc-ui";
 
@@ -27,11 +27,16 @@ export const Carousel = (props: CarouselProps) => {
     windowSize.breakpoint === BREAKPOINTS.untilM
   ));
 
-  const updateOffset = (newOffset: number) => {
+  const updateOffset = useCallback((newOffset: number) => {
+    const cardRest = newOffset / oneCardWidth;
+    const adjustedOffset = oneCardWidth * ((cardRest - Math.floor(cardRest)) > 0.5
+      ? Math.ceil(cardRest)
+      : Math.floor(cardRest));
     const maxPossibleOffset = oneCardWidth * items.length - containerWidth;
-    const newCountedOffset = Math.min(newOffset, maxPossibleOffset);
+    const newCountedOffset = Math.min(Math.max(adjustedOffset, 0), maxPossibleOffset);
+
     setOffset(newCountedOffset);
-  };
+    }, [oneCardWidth, containerWidth]);
 
   const scrollHandlers = useScroll(offset, imagesContainerRef, updateOffset);
 

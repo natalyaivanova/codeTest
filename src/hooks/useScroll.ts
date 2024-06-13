@@ -25,18 +25,16 @@ export const useScroll = (
     if (!isScrolling) return;
 
     const newPosition = e.pageX - (containerRef.current?.offsetLeft ?? 0);
-    const newOffset = newPosition - startPosition;
 
-    updateOffset(startOffset - newOffset);
+    updateOffset(startOffset - (newPosition - startPosition));
   }, [isScrolling, startPosition, startOffset, containerRef]);
 
   const onTouchScroll = useCallback((e: TouchEvent<HTMLDivElement>) => {
     if (!isScrolling) return;
 
     const newPosition = e.touches[0].pageX - (containerRef.current?.offsetLeft ?? 0);
-    const newOffset = newPosition - startPosition;
 
-    updateOffset(startOffset - newOffset);
+    updateOffset(startOffset - (newPosition - startPosition));
   }, [isScrolling, startPosition, startOffset, containerRef]);
 
   const onStop = useCallback(() => {
