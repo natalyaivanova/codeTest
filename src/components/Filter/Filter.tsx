@@ -25,7 +25,8 @@ export const Filter = (props: FilterProps) => {
     <View
       extend={{
         marginBottom: '2vw',
-        padding: '1rem',
+        marginLeft: '1vw',
+        marginRight: '1vw'
       }}
     >
       <SelectInput
