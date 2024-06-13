@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import { isEmpty } from "lodash-es";
 import { Click, Flex, IconButton, View } from "vcc-ui";
 
@@ -15,8 +15,6 @@ export const Carousel = (props: CarouselProps) => {
   const { items  } = props;
 
   const [offset, setOffset] = useState(0);
-  const [activeItem, setActiveItem] = useState(0);
-
 
   const imagesContainerRef = useRef<HTMLDivElement | null>(null);
   const oneCardWidth = imagesContainerRef?.current?.children[0]?.getBoundingClientRect().width ?? 0
@@ -33,31 +31,26 @@ export const Carousel = (props: CarouselProps) => {
     const maxPossibleOffset = oneCardWidth * items.length - containerWidth;
     const newCountedOffset = Math.min(newOffset, maxPossibleOffset);
     setOffset(newCountedOffset);
-    setActiveItem(Math.floor(newCountedOffset / oneCardWidth));
   };
 
   const scrollHandlers = useScroll(offset, imagesContainerRef, updateOffset);
 
   const moveLeft = () => {
-    const newActiveItem = activeItem === 0
-      ? activeItem
-      : activeItem - 1
-    setActiveItem(newActiveItem);
-    setOffset(newActiveItem * oneCardWidth);
+    setOffset(offset - oneCardWidth);
   }
 
   const moveRight = () => {
-    const newActiveItem = activeItem === items.length - 1
-      ? activeItem
-      : activeItem + 1
-    setActiveItem(newActiveItem);
-    setOffset(newActiveItem * oneCardWidth);
+    setOffset(offset + oneCardWidth);
   }
 
   const dotClick = (index: number) => {
-    setActiveItem(index);
     setOffset(index * oneCardWidth);
   }
+
+  const getActiveItemIndex = useMemo(() =>
+      oneCardWidth ? Math.floor(offset / oneCardWidth) : 0,
+    [offset, oneCardWidth]
+  );
 
   const emptyState = <h3>Cars not found</h3>
 
@@ -95,7 +88,7 @@ export const Carousel = (props: CarouselProps) => {
               width: '0.6rem',
               height: '0.6rem',
               borderRadius: '100%',
-              backgroundColor: index === activeItem ? '#222' : '#d5d5d5',
+              backgroundColor: getActiveItemIndex === index ? '#222' : '#d5d5d5',
               border: 'none',
               padding: '0'
             }}
