@@ -6,6 +6,8 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { BREAKPOINTS } from "../../constants";
 import Pagination from "../Pagination";
 
+const CAROUSEL_MAX_WIDTH = 1200;
+
 interface CarouselProps {
   items: Array<React.ReactElement>;
 }
@@ -42,9 +44,9 @@ export const Carousel = (props: CarouselProps) => {
 
   useEffect(() => {
     if (windowSize?.width) {
-      updateCarouselWidth(windowSize.width);
+      updateCarouselWidth(windowSize.width < CAROUSEL_MAX_WIDTH ? windowSize.width : CAROUSEL_MAX_WIDTH);
     }
-  }, [windowSize, oneStepOffset]);
+  }, [windowSize?.width, oneStepOffset]);
 
   return (
     isEmpty(items)
@@ -57,7 +59,7 @@ export const Carousel = (props: CarouselProps) => {
           flexWrap: 'nowrap',
           overflow: 'hidden',
           width: carouselWidth ? `${carouselWidth}px` : '100%',
-          maxWidth: carouselWidth ? `${carouselWidth}px` : '100%',
+          maxWidth: `${CAROUSEL_MAX_WIDTH}px`
         }}
       >
         <Flex

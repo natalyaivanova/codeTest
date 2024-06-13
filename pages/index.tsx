@@ -13,13 +13,13 @@ const IndexPage = () => {
           padding: 5,
         },
         untilL: {
-          width: '94vw',
+          width: '100vw',
         },
         fromL: {
-          width: '64vw',
+          width: '90vw',
           margin: '0 auto'
-        }
-    }}>
+        }}}
+    >
       <CarList />
     </Flex>
   )

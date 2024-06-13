@@ -40,7 +40,6 @@ export const CarCard = (props: CarCardProps) => {
         <Text
           extend={{ untilL: { fontSize: '1.3em' }}}
           variant="bates"
-          subStyle="inline-link"
         >{item.modelType}</Text>
       </Flex>
 
