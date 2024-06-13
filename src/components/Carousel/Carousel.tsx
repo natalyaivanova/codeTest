@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef } from "react";
 import { isEmpty } from "lodash-es";
-import { Flex, View } from "vcc-ui";
+import { Click, Flex, IconButton, View } from "vcc-ui";
 
 import { useWindowSize } from "../../hooks/useWindowSize";
 import { BREAKPOINTS } from "../../constants";
-import Pagination from "../Pagination";
 import { useScroll } from "../../hooks/useScroll";
+import { ARIA_LABELS } from "../../constants";
 
 interface CarouselProps {
   items: Array<React.ReactElement>;
@@ -15,20 +15,14 @@ export const Carousel = (props: CarouselProps) => {
   const { items  } = props;
 
   const [offset, setOffset] = useState(0);
+  const [activeItem, setActiveItem] = useState(0);
+
 
   const imagesContainerRef = useRef<HTMLDivElement | null>(null);
   const oneCardWidth = imagesContainerRef?.current?.children[0]?.getBoundingClientRect().width ?? 0
   const containerWidth = imagesContainerRef.current?.clientWidth ?? 0;
 
-  const [firstVisibleItem, setFirstVisibleItem] = useState(0);
-  const [carouselWidth, setCarouselWidth] = useState(0);
-
-  const updateCarouselWidth = useCallback((width) => {
-    const visibleItems = oneCardWidth ? Math.floor(width / oneCardWidth) : 1;
-    setCarouselWidth (visibleItems * oneCardWidth);
-  }, [oneCardWidth]);
-
-  const windowSize = useWindowSize(updateCarouselWidth);
+  const windowSize = useWindowSize();
 
   const isMobile = !!(windowSize && (
     windowSize.breakpoint === BREAKPOINTS.untilL ||
@@ -37,30 +31,35 @@ export const Carousel = (props: CarouselProps) => {
 
   const updateOffset = (newOffset: number) => {
     const maxPossibleOffset = oneCardWidth * items.length - containerWidth;
-    setOffset(Math.min(newOffset, maxPossibleOffset));
+    const newCountedOffset = Math.min(newOffset, maxPossibleOffset);
+    setOffset(newCountedOffset);
+    setActiveItem(Math.floor(newCountedOffset / oneCardWidth));
   };
 
   const scrollHandlers = useScroll(offset, imagesContainerRef, updateOffset);
 
   const moveLeft = () => {
-    setFirstVisibleItem(firstVisibleItem === 0 ? firstVisibleItem : firstVisibleItem - 1);
+    const newActiveItem = activeItem === 0
+      ? activeItem
+      : activeItem - 1
+    setActiveItem(newActiveItem);
+    setOffset(newActiveItem * oneCardWidth);
   }
 
   const moveRight = () => {
-    setFirstVisibleItem(firstVisibleItem === items.length - 1 ? firstVisibleItem : firstVisibleItem + 1);
+    const newActiveItem = activeItem === items.length - 1
+      ? activeItem
+      : activeItem + 1
+    setActiveItem(newActiveItem);
+    setOffset(newActiveItem * oneCardWidth);
   }
 
   const dotClick = (index: number) => {
-    setFirstVisibleItem(index);
+    setActiveItem(index);
+    setOffset(index * oneCardWidth);
   }
 
   const emptyState = <h3>Cars not found</h3>
-
-  // useEffect(() => {
-  //   if (windowSize?.width) {
-  //     updateCarouselWidth(windowSize.width < CAROUSEL_MAX_WIDTH ? windowSize.width : CAROUSEL_MAX_WIDTH);
-  //   }
-  // }, [windowSize?.width, oneCardWidth]);
 
   return (
     isEmpty(items)
@@ -73,7 +72,6 @@ export const Carousel = (props: CarouselProps) => {
             width: '100%',
             alignItems: 'center',
             transition: '0.4s transform ease-out',
-            // transform: `translate3d(-${firstVisibleItem * oneCardWidth}px, 0, 0)`
             transform: `translate3d(-${offset}px, 0, 0)`
           }}
 
@@ -82,15 +80,57 @@ export const Carousel = (props: CarouselProps) => {
           {items}
         </View>
 
-        <Pagination
-          isMobile={isMobile}
-          activeItemIndex={firstVisibleItem}
-          totalItems={items.length}
-          moveLeftHandler={moveLeft}
-          moveRightHandler={moveRight}
-          dotClickHandler={dotClick}
-        />
-    </>
+        {isMobile
+        ? <Flex
+        extend={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          marginRight: '.5vw',
+          marginTop: '1rem',
+          gap: '1vw'
+        }}>
+        {items.map((_, index: number) => (
+          <Click
+            extend={{
+              width: '0.6rem',
+              height: '0.6rem',
+              borderRadius: '100%',
+              backgroundColor: index === activeItem ? '#222' : '#d5d5d5',
+              border: 'none',
+              padding: '0'
+            }}
+            key={`dot${index}`}
+            onClick={() => dotClick(index)}
+            type="button"
+          />
+        ))}
+        </Flex>
+          : <Flex
+          extend={{
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+            marginRight: '.5vw',
+            marginTop: '1rem',
+            gap: '1vw'
+          }}
+        >
+          <IconButton
+            aria-label={ARIA_LABELS.LEFT}
+            iconName="navigation-chevronback"
+            variant="outline"
+            onClick={moveLeft}
+            disabled={offset <= 0}
+          />
+
+          <IconButton
+            aria-label={ARIA_LABELS.RIGHT}
+            iconName="navigation-chevronforward"
+            variant="outline"
+            onClick={moveRight}
+            disabled={offset !== 0 && offset >= containerWidth}
+          />
+        </Flex>}
+      </>
   );
 };
 

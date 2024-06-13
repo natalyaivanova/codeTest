@@ -28,19 +28,25 @@ export const CarCard = (props: CarCardProps) => {
         }
       }}
     >
-      <Text extend={{ untilL: { fontSize: '1.2em' }}} variant="bates" subStyle="emphasis" fg="fg.secondary">
+      <Text subStyle="emphasis" fg="foreground.secondary">
         {item.bodyType.toUpperCase()}
       </Text>
 
       <Flex extend={{
         marginBottom: '1rem',
         justifyContent: 'flex-start',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        untilL: {
+          flexDirection: 'column'
+        },
+        fromL: {
+          flexDirection: 'row'
+        }
       }}>
-        <Text variant="amundsen">
+        <Text variant="amundsen" extend={{ paddingRight: '10px' }}>
           {item.modelName}
         </Text>
-        <Text variant="bates">
+        <Text fg="foreground.secondary">
           {item.modelType}
         </Text>
       </Flex>
@@ -54,14 +60,6 @@ export const CarCard = (props: CarCardProps) => {
           layout="responsive"
           objectFit="cover"
         />
-
-        {/*<img*/}
-        {/*  src={item.imageUrl}*/}
-        {/*  alt={`Volvo ${item.modelName} model`}*/}
-        {/*  width={'290'}*/}
-        {/*  height={'220'}*/}
-        {/*  objectFit="cover"*/}
-        {/*/>*/}
       </Flex>
 
       <Flex extend={{
