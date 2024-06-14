@@ -65,6 +65,9 @@ export const Carousel = (props: CarouselProps) => {
     : <>
         <View
           ref={imagesContainerRef}
+          role="region"
+          aria-roledescription="carousel"
+          aria-label="volvo cars"
           extend={{
             flexDirection: 'row',
             width: '100%',
@@ -80,13 +83,16 @@ export const Carousel = (props: CarouselProps) => {
 
         {isMobile
         ? <Flex
-        extend={{
-          flexDirection: 'row',
-          justifyContent: 'center',
-          marginRight: '.5vw',
-          marginTop: '1rem',
-          gap: '1vw'
-        }}>
+          role="group"
+          aria-label="carousel controls"
+          data-testid="carousel-controls"
+          extend={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            marginRight: '.5vw',
+            marginTop: '1rem',
+            gap: '1vw'
+          }}>
         {items.map((_, index: number) => (
           <Click
             extend={{
@@ -114,6 +120,7 @@ export const Carousel = (props: CarouselProps) => {
         >
           <IconButton
             aria-label={ARIA_LABELS.LEFT}
+            data-testid="button-previous"
             iconName="navigation-chevronback"
             variant="outline"
             onClick={moveLeft}
@@ -122,6 +129,7 @@ export const Carousel = (props: CarouselProps) => {
 
           <IconButton
             aria-label={ARIA_LABELS.RIGHT}
+            data-testid="button-next"
             iconName="navigation-chevronforward"
             variant="outline"
             onClick={moveRight}

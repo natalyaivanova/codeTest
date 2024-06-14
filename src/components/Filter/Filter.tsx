@@ -30,6 +30,10 @@ export const Filter = (props: FilterProps) => {
       }}
     >
       <SelectInput
+        role="combobox"
+        aria-haspopup="listbox"
+        aria-label="filter by car body type"
+
         name={name}
         label={label}
         value={value}

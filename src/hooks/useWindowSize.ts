@@ -42,11 +42,9 @@ export const useWindowSize = (onWindowChange?: (width: number) => void) => {
 
     if (isWindowClient) {
       window.addEventListener("resize", setSize);
-      window.addEventListener("load", setSize);
 
       return () => {
         window.removeEventListener("resize", setSize);
-        window.removeEventListener("load", setSize);
       }
     }
   }, [isWindowClient, setWindowSize]);

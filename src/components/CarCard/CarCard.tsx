@@ -14,6 +14,8 @@ export const CarCard = (props: CarCardProps) => {
 
   return (
     <View
+      role="group"
+      aria-roledescription="car slide"
       extend={{
         flexDirection: 'column',
         padding: '1rem',
@@ -51,7 +53,10 @@ export const CarCard = (props: CarCardProps) => {
         </Text>
       </Flex>
 
-      <Flex>
+      <Flex
+        role="img"
+        aria-label="car image"
+      >
         <Image
           src={item.imageUrl}
           alt={`Volvo ${item.modelName} model`}
