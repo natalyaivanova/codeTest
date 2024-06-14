@@ -9,30 +9,21 @@ export const useScroll = (
   const [startPosition, setStartPosition] = useState(0);
   const [startOffset, setStartOffset] = useState(0);
 
-  const onMouseStart = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+  const onStart = useCallback((e: React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement> ) => {
+    const startPosition = 'touches' in e
+      ? e.touches[0].pageX - (containerRef.current?.offsetLeft ?? 0)
+      : e.pageX - (containerRef.current?.offsetLeft ?? 0)
     setIsScrolling(true);
-    setStartPosition(e.pageX - (containerRef.current?.offsetLeft ?? 0));
+    setStartPosition(startPosition);
     setStartOffset(offset);
   }, [containerRef, offset]);
 
-  const onTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    setIsScrolling(true);
-    setStartPosition(e.touches[0].pageX - (containerRef.current?.offsetLeft ?? 0));
-    setStartOffset(offset);
-  }, [containerRef, offset]);
-
-  const onMouseScroll = useCallback((e: MouseEvent<HTMLDivElement>) => {
+  const onScroll = useCallback((e: TouchEvent<HTMLDivElement>|  MouseEvent<HTMLDivElement>) => {
     if (!isScrolling) return;
 
-    const newPosition = e.pageX - (containerRef.current?.offsetLeft ?? 0);
-
-    updateOffset(startOffset - (newPosition - startPosition));
-  }, [isScrolling, startPosition, startOffset, containerRef]);
-
-  const onTouchScroll = useCallback((e: TouchEvent<HTMLDivElement>) => {
-    if (!isScrolling) return;
-
-    const newPosition = e.touches[0].pageX - (containerRef.current?.offsetLeft ?? 0);
+    const newPosition = 'touches' in e
+      ? e.touches[0].pageX - (containerRef.current?.offsetLeft ?? 0)
+      :e.pageX - (containerRef.current?.offsetLeft ?? 0);
 
     updateOffset(startOffset - (newPosition - startPosition));
   }, [isScrolling, startPosition, startOffset, containerRef]);
@@ -44,13 +35,13 @@ export const useScroll = (
   }, [isScrolling, offset]);
 
   return {
-    onMouseDown: onMouseStart,
+    onMouseDown: onStart,
     onMouseLeave: onStop,
     onMouseUp: onStop,
-    onMouseMove: onMouseScroll,
+    onMouseMove: onScroll,
 
-    onTouchStart: onTouchStart,
-    onTouchMove: onTouchScroll,
+    onTouchStart: onStart,
+    onTouchMove: onScroll,
     onTouchEnd: onStop
   };
 };
