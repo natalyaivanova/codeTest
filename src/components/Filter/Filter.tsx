@@ -1,16 +1,8 @@
 import React, { useCallback } from "react";
 import { View, SelectInput } from "vcc-ui";
 
-import { IFilterOption } from "./Filters.types";
 import { FILTER_ALL_VALUE } from "../../constants";
-
-interface FilterProps {
-  name: string;
-  label: string;
-  value?: string;
-  options: IFilterOption[];
-  onSelect: (key: string, value: string) => void;
-}
+import { FilterProps } from "../../types";
 
 export const Filter = (props: FilterProps) => {
   const { name, label, options, onSelect } = props;

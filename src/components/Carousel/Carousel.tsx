@@ -1,4 +1,4 @@
-import React, {useState, useRef, useMemo, useCallback} from "react";
+import React, { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import { isEmpty } from "lodash-es";
 import { Click, Flex, IconButton, View } from "vcc-ui";
 
@@ -6,10 +6,8 @@ import { useWindowSize } from "../../hooks/useWindowSize";
 import { BREAKPOINTS } from "../../constants";
 import { useScroll } from "../../hooks/useScroll";
 import { ARIA_LABELS } from "../../constants";
-
-interface CarouselProps {
-  items: Array<React.ReactElement>;
-}
+import EmptyState from "../EmptyState";
+import { CarouselProps } from "../../types";
 
 export const Carousel = (props: CarouselProps) => {
   const { items  } = props;
@@ -57,11 +55,11 @@ export const Carousel = (props: CarouselProps) => {
     [offset, oneCardWidth]
   );
 
-  const emptyState = <h3>Cars not found</h3>
+  useEffect(() => setOffset(0), [items]);
 
   return (
     isEmpty(items)
-    ? emptyState
+    ? <EmptyState />
     : <>
         <View
           ref={imagesContainerRef}

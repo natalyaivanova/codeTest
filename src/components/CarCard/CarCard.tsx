@@ -3,11 +3,7 @@ import Image from 'next/image';
 import { Flex, View, Link, Text } from "vcc-ui"
 
 import { ROUTES } from "../../constants";
-import { ICar} from "../../model/car";
-
-export interface CarCardProps {
-  item: ICar;
-}
+import { CarCardProps } from "../../types";
 
 export const CarCard = (props: CarCardProps) => {
   const { item } = props;
